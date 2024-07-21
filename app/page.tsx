@@ -21,7 +21,7 @@ export default function Home() {
 	useEffect(() => {
 		const loadPulls = async () => {
 			const pulls = await viewAllPulls();
-			setPulls(pulls);
+			setPulls(pulls.reverse());
 		};
 		loadPulls();
 	}, []);
