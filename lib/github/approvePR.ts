@@ -12,7 +12,7 @@ export const approvePR = async (pull_number: number) => {
 	try {
 		console.log("Approving...", OWNER, REPO, pull_number);
 
-		const result = await octokit.request(`POST /repos/${OWNER}/${REPO}/pulls/${pull_number}/reviews`);
+		const result = await octokit.request(`PUT /repos/${OWNER}/${REPO}/pulls/${pull_number}/merge`);
 
 		return result;
 	} catch (error: any) {
