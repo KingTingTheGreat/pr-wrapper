@@ -4,6 +4,7 @@ import { viewAllPulls } from '@/lib/github/viewAllPulls';
 import { useState, useEffect } from 'react';
 import { AllJournals } from '@/types';
 import { getAllJournals } from '@/lib/journals/getJournals';
+import { createPull } from '@/lib/github/createPR';
 const yaml = require('js-yaml');
 
 export default function Home() {
@@ -15,6 +16,24 @@ export default function Home() {
     console.log(`Calling approvePR(${pull_number})...`);
     const res = await approvePR(pull_number);
     console.log(res);
+  };
+
+  const submit = async (event: Event) => {
+    event.preventDefault();
+    console.log('Submitting...');
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('authorEmail', 'jting@bu.edu');
+    formData.append('journalTitle', file.name);
+    fetch('/submit', {
+      method: 'POST',
+      body: formData,
+    }).then((res) => console.log(res));
   };
 
   useEffect(() => {
@@ -39,7 +58,7 @@ export default function Home() {
           accept="application/pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
-        <button onClick={() => console.log(file)}>Log file</button>
+        <button onClick={(e: any) => submit(e)}>Log file</button>
       </div>
       <div>
         <h2>Pulls</h2>
